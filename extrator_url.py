@@ -40,13 +40,33 @@ class ExtratorURL:
             valor = self.get_url_parametros()[indice_valor: indice_e_comercial]
         return valor
 
+
     def __len__(self):
         return len(self.url)
+
+    def __str__(self):
+        return self.url + "\n" + "Parâmetros: " + self.get_url_parametros() + '\n' + "URL BASE: " + self.get_url_base()
+
+    def __eq__(self, other):
+        return self.url == other.url
+
+def get_valor_dolar_convertido_reais(parametro, valor_dolar):
+    return parametro * valor_dolar
 
 
 url = "https://bytebank.com/cambio?quantidade=100&moedaOrigem=real&moedaDestino=dolar"
 extrator_url = ExtratorURL(url)
-print("O tamanho da URL: ", len(extrator_url))
+
+VALOR_DOLAR = 5.50 #1 dólar = 5.50 reais
+
 valor_quantidade = extrator_url.get_valor_parametro("quantidade")
-print(valor_quantidade)
+moeda_origem = extrator_url.get_valor_parametro("moedaOrigem")
+moeda_destino = extrator_url.get_valor_parametro("moedaDestino")
+
+if moeda_origem == "real" and moeda_destino == "dolar":
+    valor_conversao = int(valor_quantidade) / VALOR_DOLAR
+elif moeda_origem == "dolar" and moeda_destino == "real":
+    valor_conversao = int(valor_quantidade) * VALOR_DOLAR
+else:
+    print(f"Câmbio de {moeda_origem} para {moeda_destino} não está disponível")
 
